@@ -2,64 +2,71 @@ import java.util.*;
 
 public class Knapsack {
     static int optimalWeight(int W, int[] w) {
-        //write you code here
+       
     	
-    	/* This is 0/1 knapsack problem without repetetions
+    	/* This is 0/1 knapsack problem without repetetions (cleaner code)
     	 * 
-    	 * Construct a n*w matrix where n is the weight leading upto W (subproblem)
-    	 *
-    	 * Sub-problem is to fill the smaller knapsack with the greatest weights possible
+    	 * You are given a set of bars of gold and your goal is to take as much gold as possible into your bag. There is just one copy of each bar and for each bar you can either take it or not (hence you cannot take a fraction of a bar).
+           Problem Description
+           Task. Given 𝑛 gold bars,  nd the maximum weight of gold that  ts into a bag of capacity 𝑊 .
     	 * 
     	 * 
-    	 * I solved it in the worst possible fashion....can  be optimized, but i m lazy
+    	 * Used DP technique to create a 2D array. Each subproblem consists of taking only that weight and creating a 
+    	 * smaller knapsack such that the smaller knapsack is most optimized one
+    	 * 
+    	 * Hit the nasty seg fault error which was rectified taking dynamically sized arraylist
+    	 * 
+    	 * 
+    	 */
+    	 
+
+    	
+    	
+    	List<List<Integer>> result = new ArrayList<>(); //declare vector instead of array
+    	
+    	//set row 1 to 0
+    	
+    	int temp=0;
+    	ArrayList<Integer> row1 = new ArrayList<Integer>();
+    	while(temp<=W) {
+    		row1.add(0);
+    		temp++;
+    	}
+    	
+    	result.add(row1);
+    	
+    	//fill the remaining rows
+    	/*
+    	 * row = each element in the array w
+    	 * column = values from 0 to W
+    	 * This makes sure that we are calculating the max knapsack given that weight only which will be aggregated in the end
     	 */
     	
-    	int result[][] = new int[w.length][W+1];
-    	
-    	//put first column as 0 as if weight is 0, the max that can be selected is 0
-    	// alternatively a row can be added on the top with all 0s for a consistent logic
-    	
-    	int i=0,j=0;
-    	while (j<w.length) {
-    		result[i][j]=0;
-    		j++;
-    	}
-    	
-    	//fill the first row with a different logic
-    	j=1;
-    	while (j<=W) {
-    		if (w[0]>j) {
-    			result[0][j] = 0;
-    		}
-    		else if (w[0]==j) {
-    			result[0][j] = w[0];
-    		}
-    		else  {
-    			result[0][j] = result[0][j-1];
-    		}
-    		j++;
-    	}
-    	
-    	//fill the remaining matrix as per the logic
-    	
-    	for (int k=1;k<w.length;k++) {
-    		int l = 1;
-    		while (l<=W) {
-    		//System.out.println("value of l-->"+l);
-    			if(w[k]>l) {
-    				result[k][l] = result[k-1][l];
+    	for (int i=0;i<w.length;i++) {
+    		int j=1;
+    		ArrayList<Integer> row = new ArrayList<Integer>();
+    		row.add(0);
+    		while (j<=W) {
+    			if (w[i]>j) {
+    				row.add(result.get(i).get(j));
     			}
-    			else if (w[k]==l) {
-    				result[k][l] = w[k];
+    			
+    			else if (w[i]==j) {
+    				row.add(w[i]);
     			}
+    			
     			else {
-    			//	System.out.println("k is-->"+k+ " weight is ==>"+w[k]);
-    				result[k][l] = Math.max((w[k]+result[k-1][l-w[k]]), result[k-1][l]);
+    				//System.out.println("i'm in the else case");
+    				int val_2_add = Math.max(w[i]+result.get(i).get(j-w[i]), result.get(i).get(j));
+    				row.add(val_2_add);
     			}
-    			l++;
+    			j++;
     		}
+    		
+    		result.add(row);
     	}
-        return result[w.length-1][W];
+    	
+        return result.get(w.length).get(W);
     }
 
     public static void main(String[] args) {
@@ -74,4 +81,3 @@ public class Knapsack {
         System.out.println(optimalWeight(W, w));
     }
 }
-
