@@ -1,42 +1,63 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class test {
 	
-	static void printSubsets(int set[])
+	static int printSubsets(int set[])
     {
         int n = set.length;
-         // shamelessly lifted code. Need to tweatk
-   
+ 
         // Run a loop for printing all 2^n
         // subsets one by obe
+        Set<ArrayList<Integer>> a  = new HashSet<ArrayList<Integer>>();
         for (int i = 0; i < (1<<n); i++)
         {
-            int sum=0;
-        	System.out.print("{ ");
- 
+            System.out.print("{ ");
+            ArrayList<Integer> subset = new ArrayList<Integer>();
             // Print current subset
-            for (int j = 0; j < n; j++) 
+            for (int j = 0; j < n; j++)
  
-                // (1<<j) is a number with jth bit 1
-                // so when we 'and' them with the
-                // subset number we get which numbers
-                // are present in the subset and which
-                // are not
-            	
-                if ((i & (1 << j)) > 0)
-                	sum+=set[j];
-                    //store this sum in a hashmap and increment value, if the value is ==3, break and send 1
-                    System.out.print(sum + " ");
-                  
+                
+                if ((i & (1 << j)) > 0) {
+                	
+                	//add logic here to store them in a hashset
+                    System.out.print(set[j] + " ");
+                    subset.add(set[j]);
+                }
+            a.add(subset);
             System.out.println("}");
-          
-       }
+        }
+        
+        // Get the sum of each set and count till 3. Run through all the elements
+        
+        Map<Integer,Integer> storeSum = new HashMap<Integer,Integer>();
+        
+        for (ArrayList e : a) {
+        	for (Integer element : e) {
+        		
+        	}
+        }
+        
+        
+        
+        System.out.println("length of hash set-->"+a.size());
+        
+        return 0;
     }
 
 
 	public static void main(String[] args) {
 		
-		 int set[] = {1,2,3,4};
-	        printSubsets(set);
+		 int set[] = {3,3,3};
+	        int val= printSubsets(set);
+	        System.out.println("value is-->"+val);
 		
+		
+
+	}
+
+}
